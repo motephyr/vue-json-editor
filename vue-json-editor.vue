@@ -1,7 +1,6 @@
 <template>
   <div>
     <div class="jsoneditor-vue"></div>
-    <div class="jsoneditor-btns" v-if="showBtns!==false"><button class="json-save-btn" type="button" @click="onSave()" :disabled="error">保存</button></div>
   </div>
 </template>
 
@@ -9,7 +8,7 @@
   import './assets/jsoneditor.css'
   import JsonEditor from './assets/jsoneditor'
   export default {
-    props: ['value', 'showBtns',"mode","modes"],
+    props: ['value',"mode","modes", "schema"],
     watch: {
       value: function (newValue) {
         if (!this.internalChange) {
@@ -27,13 +26,11 @@
     },
     mounted () {
      var self = this;
-     var mode="tree";
-     var modes= ['tree', 'code', 'form', 'text', 'view'];
-      if (this.mode!==undefined) mode=this.mode;
-      if (!this.modes!== undefined) modes=this.modes;
+
      var options = {
-        mode: mode,
-        modes: modes, // allowed modes
+        schema: this.schema !== undefined ? this.schema : null,
+        mode: (this.mode!==undefined) ? this.mode : "code",
+        modes: ['tree', 'code', 'form', 'text', 'view'], // allowed modes
         onChange () {
           try {
             var json = self.editor.get()
